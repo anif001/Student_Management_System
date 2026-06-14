@@ -305,7 +305,13 @@ public class StudentMapper {
         Student student = new Student();
         student.setId(dto.getId());
         student.setRollNumber(dto.getRollNumber());
-        // ... similar mapping for all fields
+        student.setFirstName(dto.getFirstName());
+        student.setLastName(dto.getLastName());
+        student.setEmail(dto.getEmail());
+        student.setPhone(dto.getPhone());
+        student.setDepartment(dto.getDepartment());
+        student.setSemester(dto.getSemester());
+        student.setCgpa(dto.getCgpa());
         return student;
     }
 }
@@ -444,7 +450,12 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new StudentNotFoundException(id));
         existing.setRollNumber(studentDTO.getRollNumber());
         existing.setFirstName(studentDTO.getFirstName());
-        // ... update all fields
+        existing.setLastName(studentDTO.getLastName());
+        existing.setEmail(studentDTO.getEmail());
+        existing.setPhone(studentDTO.getPhone());
+        existing.setDepartment(studentDTO.getDepartment());
+        existing.setSemester(studentDTO.getSemester());
+        existing.setCgpa(studentDTO.getCgpa());
         return studentMapper.toDTO(studentRepository.save(existing));
     }
 

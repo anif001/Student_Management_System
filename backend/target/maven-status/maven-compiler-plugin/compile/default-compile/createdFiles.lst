@@ -1,10 +1,10 @@
 com\studentmanagement\exception\GlobalExceptionHandler.class
-com\studentmanagement\repository\StudentRepository.class
 com\studentmanagement\mapper\StudentMapper.class
 com\studentmanagement\StudentManagementApplication.class
-com\studentmanagement\exception\StudentNotFoundException.class
-com\studentmanagement\service\StudentService.class
 com\studentmanagement\exception\ErrorResponse.class
 com\studentmanagement\service\impl\StudentServiceImpl.class
+com\studentmanagement\repository\StudentRepository.class
+com\studentmanagement\exception\StudentNotFoundException.class
+com\studentmanagement\service\StudentService.class
 com\studentmanagement\dto\StudentDTO.class
 com\studentmanagement\entity\Student.class
