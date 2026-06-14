@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Management System - Complete Guide</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 1000px; margin: 40px auto; padding: 0 30px; color: #2d2d2d; }
+  h1 { color: #1a73e8; border-bottom: 3px solid #1a73e8; padding-bottom: 10px; font-size: 2em; }
+  h2 { color: #1a73e8; margin-top: 40px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+  h3 { color: #333; margin-top: 25px; }
+  pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; border-left: 4px solid #1a73e8; font-family: 'Consolas', 'Courier New', monospace; font-size: 14px; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+  th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; }
+  th { background: #1a73e8; color: white; }
+  tr:nth-child(even) { background: #f9f9f9; }
+  .note { background: #e8f0fe; border-left: 4px solid #1a73e8; padding: 15px; margin: 15px 0; border-radius: 4px; }
+  .endpoint { background: #e6f4ea; border-left: 4px solid #34a853; padding: 12px; margin: 10px 0; border-radius: 4px; font-family: 'Consolas', monospace; }
+  .method { display: inline-block; padding: 3px 10px; border-radius: 3px; color: white; font-weight: bold; font-size: 12px; margin-right: 8px; }
+  .get { background: #34a853; }
+  .post { background: #1a73e8; }
+  .put { background: #fbbc04; color: #333; }
+  .delete { background: #ea4335; }
+  ul, ol { padding-left: 25px; }
+  li { margin: 5px 0; }
+  .toc { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+  .toc a { color: #1a73e8; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  @media print { body { margin: 0; padding: 20px; } pre { page-break-inside: avoid; } h2, h3 { page-break-after: avoid; } }
+</style>
+</head>
+<body>
+
+<h1>Student Management System</h1>
+<p><strong>Complete Interview Preparation Guide — From R&D to Production</strong></p>
+<p><em>Spring Boot 3.3.0 | Java 17 | PostgreSQL | JPA / Hibernate | Maven</em></p>
+
+<div class="toc">
+<h3>Table of Contents</h3>
+<ol>
+  <li><a href="#overview">Project Overview</a></li>
+  <li><a href="#tech-stack">Tech Stack &amp; Dependencies</a></li>
+  <li><a href="#project-structure">Project Structure</a></li>
+  <li><a href="#layer1">Layer 1: Entity (Database Model)</a></li>
+  <li><a href="#layer2">Layer 2: Repository (Data Access)</a></li>
+  <li><a href="#layer3">Layer 3: DTO (Data Transfer Object)</a></li>
+  <li><a href="#layer4">Layer 4: Mapper (Entity &harr; DTO)</a></li>
+  <li><a href="#layer5">Layer 5: Exception Handling</a></li>
+  <li><a href="#layer6">Layer 6: Service (Business Logic)</a></li>
+  <li><a href="#layer7">Layer 7: Controller (REST API)</a></li>
+  <li><a href="#layer8">Layer 8: Configuration</a></li>
+  <li><a href="#endpoints">All REST API Endpoints</a></li>
+  <li><a href="#validation">Validation &amp; Error Responses</a></li>
+  <li><a href="#testing">Testing Strategy</a></li>
+  <li><a href="#db">Database Schema</a></li>
+  <li><a href="#how-to-run">How to Run</a></li>
+  <li><a href="#postman">Postman Collection</a></li>
+  <li><a href="#interview">Interview Questions</a></li>
+</ol>
+</div>
+
+<h2 id="overview">1. Project Overview</h2>
+<p>This is a <strong>RESTful Student Management System</strong> built with Spring Boot. It provides CRUD (Create, Read, Update, Delete) operations for managing student records, along with search functionality.</p>
+
+<p><strong>Business Requirements:</strong></p>
+<ul>
+  <li>Store student information: roll number, name, email, phone, department, semester, CGPA</li>
+  <li>Add new students</li>
+  <li>Retrieve student details by ID</li>
+  <li>List all students</li>
+  <li>Update existing student records</li>
+  <li>Delete student records</li>
+  <li>Search students by name (partial match)</li>
+  <li>Search students by department</li>
+  <li>Search student by exact roll number</li>
+</ul>
+
+<h2 id="tech-stack">2. Tech Stack &amp; Dependencies</h2>
+
+<table>
+  <tr><th>Technology</th><th>Purpose</th></tr>
+  <tr><td>Java 17</td><td>Programming language</td></tr>
+  <tr><td>Spring Boot 3.3.0</td><td>Framework (auto-configuration, embedded server)</td></tr>
+  <tr><td>Spring Web</td><td>REST API (Tomcat embedded, @RestController, @RequestMapping)</td></tr>
+  <tr><td>Spring Data JPA</td><td>Database access via Hibernate ORM</td></tr>
+  <tr><td>PostgreSQL</td><td>Relational database</td></tr>
+  <tr><td>Lombok</td><td>Boilerplate code reduction (@Data, @NoArgsConstructor, etc.)</td></tr>
+  <tr><td>Bean Validation</td><td>Jakarta @NotBlank, @Email, @Min/@Max annotations</td></tr>
+  <tr><td>SpringDoc OpenAPI</td><td>Swagger UI for API documentation</td></tr>
+  <tr><td>JUnit 5 + Mockito</td><td>Unit &amp; integration testing</td></tr>
+  <tr><td>Maven</td><td>Build tool &amp; dependency management</td></tr>
+</table>
+
+<div class="note">
+<strong>Key pom.xml dependencies explained:</strong>
+<ul>
+  <li><code>spring-boot-starter-web</code> — Brings embedded Tomcat, REST annotations, Jackson for JSON</li>
+  <li><code>spring-boot-starter-data-jpa</code> — Hibernate ORM + Spring Data JPA (auto-implements repositories)</li>
+  <li><code>postgresql</code> — PostgreSQL JDBC driver (runtime scope only)</li>
+  <li><code>spring-boot-starter-validation</code> — Jakarta Bean Validation API + Hibernate Validator</li>
+  <li><code>lombok</code> — Generates getters/setters/constructors at compile time</li>
+  <li><code>springdoc-openapi-starter-webmvc-ui</code> — Auto-generates Swagger docs from annotations</li>
+</ul>
+</div>
+
+<h2 id="project-structure">3. Project Structure (Layered Architecture)</h2>
+
+<pre>
+Student_Management/
+├── backend/
+│   ├── pom.xml
+│   └── src/main/java/com/studentmanagement/
+│       ├── StudentManagementApplication.java   &lt;-- Entry point (@SpringBootApplication)
+│       ├── config/                              &lt;-- Configuration classes (CORS, etc.)
+│       ├── entity/Student.java                  &lt;-- JPA entity (database table mapping)
+│       ├── repository/StudentRepository.java    &lt;-- Data access layer (Spring Data JPA)
+│       ├── dto/StudentDTO.java                  &lt;-- Data Transfer Object (API contract)
+│       ├── mapper/StudentMapper.java            &lt;-- Entity &harr; DTO conversion
+│       ├── exception/                           &lt;-- Custom exceptions + global handler
+│       ├── service/
+│       │   ├── StudentService.java              &lt;-- Service interface (contract)
+│       │   └── impl/StudentServiceImpl.java     &lt;-- Business logic implementation
+│       └── controller/StudentController.java    &lt;-- REST endpoints (@RestController)
+│   └── src/test/java/com/studentmanagement/
+│       ├── mapper/StudentMapperTest.java
+│       ├── service/StudentServiceImplTest.java
+│       └── controller/StudentControllerTest.java
+</pre>
+
+<div class="note">
+<strong>Why Layered Architecture?</strong> Separation of concerns — each layer has a single responsibility. Changes in one layer don't affect others. Makes the code testable, maintainable, and scalable.
+</div>
+
+<hr>
+
+<h2 id="layer1">4. Layer 1: Entity — <code>Student.java</code></h2>
+
+<p><strong>Purpose:</strong> Maps the Java class to a database table using JPA annotations.</p>
+
+<pre>
+@Entity
+@Table(name = "students")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "roll_number", nullable = false, unique = true, length = 20)
+    private String rollNumber;
+
+    @Column(name = "first_name", nullable = false, length = 50)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false, length = 50)
+    private String lastName;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+
+    @Column(length = 15)
+    private String phone;
+
+    @Column(nullable = false, length = 50)
+    private String department;
+
+    @Column(nullable = false)
+    private Integer semester;
+
+    @Column(nullable = false)
+    private Double cgpa;
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@Entity</code></td><td>Marks this class as a JPA entity (maps to a database table)</td></tr>
+  <tr><td><code>@Table(name = "students")</code></td><td>Specifies the table name in the database</td></tr>
+  <tr><td><code>@Id</code></td><td>Marks the primary key field</td></tr>
+  <tr><td><code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code></td><td>Auto-increment ID — database generates the value</td></tr>
+  <tr><td><code>@Column(name = "...", nullable = false, unique = true, length = 50)</code></td><td>Configures column: name, NOT NULL, UNIQUE constraint, max length</td></tr>
+  <tr><td><code>@Data</code> (Lombok)</td><td>Generates getters, setters, toString, equals, hashCode</td></tr>
+  <tr><td><code>@NoArgsConstructor / @AllArgsConstructor</code></td><td>Generates constructors (JPA requires no-arg constructor)</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> JPA uses the <code>@Entity</code> annotation to scan entities at startup. The <code>@Table</code> name defaults to the class name if not specified. <code>GenerationType.IDENTITY</code> relies on the database's auto-increment column (e.g., PostgreSQL SERIAL or IDENTITY). Hibernate DDL mode <code>update</code> in application.yml auto-creates/alters tables based on entity definitions — never use this in production!
+</div>
+
+<h2 id="layer2">5. Layer 2: Repository — <code>StudentRepository.java</code></h2>
+
+<p><strong>Purpose:</strong> Provides database CRUD operations without writing SQL. Spring Data JPA auto-implements this interface at runtime.</p>
+
+<pre>
+@Repository
+public interface StudentRepository extends JpaRepository&lt;Student, Long&gt; {
+
+    Optional&lt;Student&gt; findByRollNumber(String rollNumber);
+
+    List&lt;Student&gt; findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+            String firstName, String lastName);
+
+    List&lt;Student&gt; findByDepartmentIgnoreCase(String department);
+}
+</pre>
+
+<table>
+  <tr><th>Concept</th><th>Explanation</th></tr>
+  <tr><td><code>JpaRepository&lt;Student, Long&gt;</code></td><td>Built-in CRUD: save(), findById(), findAll(), deleteById(), etc. First type = entity, second = ID type</td></tr>
+  <tr><td><code>@Repository</code></td><td>Marks as a Spring bean (exception translation for JDBC exceptions)</td></tr>
+  <tr><td><code>findByRollNumber(String)</code></td><td><strong>Query Derivation:</strong> Spring Data JPA parses method name and generates JPQL automatically</td></tr>
+  <tr><td><code>ContainingIgnoreCase</code></td><td>Generates <code>WHERE LOWER(column) LIKE LOWER(CONCAT('%', ?, '%'))</code></td></tr>
+  <tr><td><code>Or</code></td><td>Generates <code>WHERE condition1 OR condition2</code></td></tr>
+  <tr><td><code>Optional&lt;T&gt;</code></td><td>Container that may or may not hold a value — avoids null pointer exceptions</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> Query derivation keywords: <code>findBy</code>, <code>And</code>, <code>Or</code>, <code>Between</code>, <code>LessThan</code>, <code>GreaterThan</code>, <code>Like</code>, <code>Containing</code>, <code>IgnoreCase</code>, <code>OrderBy</code>. For complex queries, use <code>@Query</code> with JPQL or native SQL. <code>Optional</code> forces the caller to handle the absent case (better than returning null).
+</div>
+
+<h2 id="layer3">6. Layer 3: DTO — <code>StudentDTO.java</code></h2>
+
+<p><strong>Purpose:</strong> Data Transfer Object — defines the API contract (what the client sends/receives). Decouples the internal entity from the external API.</p>
+
+<pre>
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentDTO {
+
+    private Long id;
+
+    @NotBlank(message = "Roll number is required")
+    private String rollNumber;
+
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    private String lastName;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
+    private String email;
+
+    @NotBlank(message = "Phone number is required")
+    private String phone;
+
+    @NotBlank(message = "Department is required")
+    private String department;
+
+    @NotNull(message = "Semester is required")
+    @Min(value = 1, message = "Semester must be at least 1")
+    @Max(value = 8, message = "Semester must be at most 8")
+    private Integer semester;
+
+    @NotNull(message = "CGPA is required")
+    @DecimalMin(value = "0.0", message = "CGPA must be at least 0.0")
+    @DecimalMax(value = "10.0", message = "CGPA must be at most 10.0")
+    private Double cgpa;
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@NotBlank</code></td><td>String must not be null and must contain at least one non-whitespace character</td></tr>
+  <tr><td><code>@Email</code></td><td>Validates email format (e.g., user@domain.com)</td></tr>
+  <tr><td><code>@NotNull</code></td><td>Value must not be null (for non-String types like Integer, Double)</td></tr>
+  <tr><td><code>@Min / @Max</code></td><td>Integer must be within the specified range (inclusive)</td></tr>
+  <tr><td><code>@DecimalMin / @DecimalMax</code></td><td>Decimal value must be within range (for Double/BigDecimal)</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> DTOs prevent entity exposure to clients. If the entity structure changes (e.g., adding an internal field), the API contract stays stable. Validation annotations trigger <code>MethodArgumentNotValidException</code> when <code>@Valid</code> is used in the controller.
+</div>
+
+<h2 id="layer4">7. Layer 4: Mapper — <code>StudentMapper.java</code></h2>
+
+<p><strong>Purpose:</strong> Converts between Entity and DTO. Keeps conversion logic centralized instead of spreading it across service/controller layers.</p>
+
+<pre>
+@Component
+public class StudentMapper {
+
+    public StudentDTO toDTO(Student student) {
+        if (student == null) return null;
+        StudentDTO dto = new StudentDTO();
+        dto.setId(student.getId());
+        dto.setRollNumber(student.getRollNumber());
+        dto.setFirstName(student.getFirstName());
+        dto.setLastName(student.getLastName());
+        dto.setEmail(student.getEmail());
+        dto.setPhone(student.getPhone());
+        dto.setDepartment(student.getDepartment());
+        dto.setSemester(student.getSemester());
+        dto.setCgpa(student.getCgpa());
+        return dto;
+    }
+
+    public Student toEntity(StudentDTO dto) {
+        if (dto == null) return null;
+        Student student = new Student();
+        student.setId(dto.getId());
+        student.setRollNumber(dto.getRollNumber());
+        // ... similar mapping for all fields
+        return student;
+    }
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@Component</code></td><td>Marks as a Spring-managed bean (auto-detected during component scan)</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> In larger projects, use <strong>MapStruct</strong> (annotation-based mapper) to auto-generate mapping code at compile time — eliminates boilerplate and is faster than manual mapping.
+</div>
+
+<h2 id="layer5">8. Layer 5: Exception Handling</h2>
+
+<h3>Custom Exception — <code>StudentNotFoundException.java</code></h3>
+<pre>
+public class StudentNotFoundException extends RuntimeException {
+    public StudentNotFoundException(Long id) {
+        super("Student not found with id: " + id);
+    }
+    public StudentNotFoundException(String message) {
+        super(message);
+    }
+}
+</pre>
+
+<h3>Error Response DTO — <code>ErrorResponse.java</code></h3>
+<pre>
+@Data
+@AllArgsConstructor
+public class ErrorResponse {
+    private int status;
+    private String message;
+    private LocalDateTime timestamp;
+}
+</pre>
+
+<h3>Global Exception Handler — <code>GlobalExceptionHandler.java</code></h3>
+<pre>
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleStudentNotFound(StudentNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .reduce((a, b) -> a + "; " + b)
+                .orElse("Validation failed");
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), message, LocalDateTime.now());
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGeneric(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "An unexpected error occurred", LocalDateTime.now());
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@RestControllerAdvice</code></td><td>Global exception handler for all @RestController classes — AOP-based</td></tr>
+  <tr><td><code>@ExceptionHandler(StudentNotFoundException.class)</code></td><td>Handles specific exception type; returns custom response with correct HTTP status</td></tr>
+  <tr><td><code>MethodArgumentNotValidException</code></td><td>Thrown automatically when @Valid fails on @RequestBody</td></tr>
+  <tr><td><code>ex.getBindingResult().getFieldErrors()</code></td><td>Contains all validation errors with field names and default messages</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> Centralized exception handling avoids try-catch blocks in controllers. <code>@RestControllerAdvice</code> is a combination of <code>@ControllerAdvice</code> + <code>@ResponseBody</code>. Always return a consistent error structure (<code>ErrorResponse</code>) so clients can parse errors uniformly.
+</div>
+
+<h2 id="layer6">9. Layer 6: Service — Business Logic</h2>
+
+<p><strong>Purpose:</strong> Contains all business rules. The service layer coordinates between the controller (incoming requests) and repository (database).</p>
+
+<h3>Interface — <code>StudentService.java</code></h3>
+<pre>
+public interface StudentService {
+    StudentDTO addStudent(StudentDTO studentDTO);
+    StudentDTO getStudentById(Long id);
+    List&lt;StudentDTO&gt; getAllStudents();
+    StudentDTO updateStudent(Long id, StudentDTO studentDTO);
+    void deleteStudent(Long id);
+    List&lt;StudentDTO&gt; searchStudentByName(String name);
+    List&lt;StudentDTO&gt; searchStudentByDepartment(String department);
+    StudentDTO searchStudentByRollNumber(String rollNumber);
+}
+</pre>
+
+<h3>Implementation — <code>StudentServiceImpl.java</code></h3>
+<pre>
+@Service
+@RequiredArgsConstructor
+public class StudentServiceImpl implements StudentService {
+
+    private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
+
+    @Override
+    public StudentDTO addStudent(StudentDTO studentDTO) {
+        Student student = studentMapper.toEntity(studentDTO);
+        Student savedStudent = studentRepository.save(student);
+        return studentMapper.toDTO(savedStudent);
+    }
+
+    @Override
+    public StudentDTO getStudentById(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+        return studentMapper.toDTO(student);
+    }
+
+    @Override
+    public List&lt;StudentDTO&gt; getAllStudents() {
+        return studentRepository.findAll().stream()
+                .map(studentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public StudentDTO updateStudent(Long id, StudentDTO studentDTO) {
+        Student existing = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+        existing.setRollNumber(studentDTO.getRollNumber());
+        existing.setFirstName(studentDTO.getFirstName());
+        // ... update all fields
+        return studentMapper.toDTO(studentRepository.save(existing));
+    }
+
+    @Override
+    public void deleteStudent(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+        studentRepository.delete(student);
+    }
+
+    @Override
+    public StudentDTO searchStudentByRollNumber(String rollNumber) {
+        Student student = studentRepository.findByRollNumber(rollNumber)
+                .orElseThrow(() -> new StudentNotFoundException(
+                        "Student not found with roll number: " + rollNumber));
+        return studentMapper.toDTO(student);
+    }
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@Service</code></td><td>Marks as service layer bean (specialization of @Component)</td></tr>
+  <tr><td><code>@RequiredArgsConstructor</code></td><td>Lombok: generates constructor for all <code>final</code> fields (constructor injection)</td></tr>
+  <tr><td><code>@Override</code></td><td>Ensures method is implementing an interface method (compiler check)</td></tr>
+  <tr><td><code>.orElseThrow()</code></td><td>If Optional is empty, throws the supplier exception — clean error handling</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> Always program to interfaces (<code>StudentService</code> interface, not the impl). This enables loose coupling — you can swap implementations (e.g., a mock for testing) without changing consumers. Constructor injection with <code>final</code> fields ensures immutability and makes dependencies explicit.
+</div>
+
+<h2 id="layer7">10. Layer 7: Controller — REST API</h2>
+
+<p><strong>Purpose:</strong> Handles HTTP requests, delegates to service layer, and returns HTTP responses.</p>
+
+<pre>
+@RestController
+@RequestMapping("/api/students")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
+public class StudentController {
+
+    private final StudentService studentService;
+
+    @PostMapping
+    public ResponseEntity&lt;StudentDTO&gt; addStudent(@Valid @RequestBody StudentDTO studentDTO) {
+        StudentDTO created = studentService.addStudent(studentDTO);
+        return new ResponseEntity&lt;&gt;(created, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity&lt;StudentDTO&gt; getStudentById(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;StudentDTO&gt;&gt; getAllStudents() {
+        return ResponseEntity.ok(studentService.getAllStudents());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity&lt;StudentDTO&gt; updateStudent(
+            @PathVariable Long id, @Valid @RequestBody StudentDTO studentDTO) {
+        return ResponseEntity.ok(studentService.updateStudent(id, studentDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity&lt;Void&gt; deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search/name")
+    public ResponseEntity&lt;List&lt;StudentDTO&gt;&gt; searchStudentByName(@RequestParam String name) {
+        return ResponseEntity.ok(studentService.searchStudentByName(name));
+    }
+
+    @GetMapping("/search/department")
+    public ResponseEntity&lt;List&lt;StudentDTO&gt;&gt; searchStudentByDepartment(@RequestParam String department) {
+        return ResponseEntity.ok(studentService.searchStudentByDepartment(department));
+    }
+
+    @GetMapping("/search/roll-number")
+    public ResponseEntity&lt;StudentDTO&gt; searchStudentByRollNumber(@RequestParam String rollNumber) {
+        return ResponseEntity.ok(studentService.searchStudentByRollNumber(rollNumber));
+    }
+}
+</pre>
+
+<table>
+  <tr><th>Annotation</th><th>Explanation</th></tr>
+  <tr><td><code>@RestController</code></td><td>= @Controller + @ResponseBody (every method returns JSON, not view name)</td></tr>
+  <tr><td><code>@RequestMapping("/api/students")</code></td><td>Base URL path for all endpoints in this controller</td></tr>
+  <tr><td><code>@PostMapping</code></td><td>HTTP POST — for creating resources</td></tr>
+  <tr><td><code>@GetMapping</code></td><td>HTTP GET — for reading/retrieving resources</td></tr>
+  <tr><td><code>@PutMapping</code></td><td>HTTP PUT — for updating existing resources (full replacement)</td></tr>
+  <tr><td><code>@DeleteMapping</code></td><td>HTTP DELETE — for removing resources</td></tr>
+  <tr><td><code>@PathVariable</code></td><td>Extracts value from URL path: <code>/api/students/{id}</code></td></tr>
+  <tr><td><code>@RequestParam</code></td><td>Extracts query parameter: <code>?name=John</code></td></tr>
+  <tr><td><code>@RequestBody</code></td><td>Binds JSON body to Java object (Jackson serialization)</td></tr>
+  <tr><td><code>@Valid</code></td><td>Triggers validation on @RequestBody before method executes</td></tr>
+  <tr><td><code>@CrossOrigin</code></td><td>Allows CORS (Cross-Origin Resource Sharing) — needed for frontend integration</td></tr>
+  <tr><td><code>ResponseEntity&lt;T&gt;</code></td><td>Full HTTP response: body, status code, headers</td></tr>
+</table>
+
+<div class="note">
+<strong>Interview Tip:</strong> <code>ResponseEntity</code> gives full control over HTTP response. <code>ResponseEntity.ok()</code> = 200, <code>ResponseEntity.noContent()</code> = 204, <code>new ResponseEntity&lt;&gt;(body, HttpStatus.CREATED)</code> = 201. RESTful conventions: POST = create (201), GET = read (200), PUT = update (200), DELETE = delete (204).
+</div>
+
+<h2 id="layer8">11. Layer 8: Configuration — <code>application.yml</code></h2>
+
+<pre>
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/student_management_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+</pre>
+
+<table>
+  <tr><th>Property</th><th>Explanation</th></tr>
+  <tr><td><code>server.port</code></td><td>Port on which the embedded Tomcat runs</td></tr>
+  <tr><td><code>spring.datasource.url</code></td><td>JDBC connection URL: <code>jdbc:postgresql://host:port/database_name</code></td></tr>
+  <tr><td><code>spring.jpa.hibernate.ddl-auto: update</code></td><td>Hibernate auto-creates/updates tables based on entities. Options: <code>none</code> (prod), <code>validate</code>, <code>update</code>, <code>create</code>, <code>create-drop</code></td></tr>
+  <tr><td><code>spring.jpa.show-sql: true</code></td><td>Logs SQL queries (for debugging; disable in production)</td></tr>
+  <tr><td><code>hibernate.dialect</code></td><td>Optimizes SQL generation for PostgreSQL</td></tr>
+  <tr><td><code>springdoc</code></td><td>Swagger/OpenAPI configuration paths</td></tr>
+</table>
+
+<hr>
+
+<h2 id="endpoints">12. All REST API Endpoints</h2>
+
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Request Body</th><th>Response</th></tr>
+  <tr>
+    <td><span class="method post">POST</span></td>
+    <td><code>/api/students</code></td>
+    <td>Add a new student</td>
+    <td>StudentDTO JSON</td>
+    <td>201 Created + StudentDTO</td>
+  </tr>
+  <tr>
+    <td><span class="method get">GET</span></td>
+    <td><code>/api/students/{id}</code></td>
+    <td>Get student by ID</td>
+    <td>-</td>
+    <td>200 OK + StudentDTO</td>
+  </tr>
+  <tr>
+    <td><span class="method get">GET</span></td>
+    <td><code>/api/students</code></td>
+    <td>Get all students</td>
+    <td>-</td>
+    <td>200 OK + StudentDTO[]</td>
+  </tr>
+  <tr>
+    <td><span class="method put">PUT</span></td>
+    <td><code>/api/students/{id}</code></td>
+    <td>Update existing student</td>
+    <td>StudentDTO JSON</td>
+    <td>200 OK + StudentDTO</td>
+  </tr>
+  <tr>
+    <td><span class="method delete">DELETE</span></td>
+    <td><code>/api/students/{id}</code></td>
+    <td>Delete student by ID</td>
+    <td>-</td>
+    <td>204 No Content</td>
+  </tr>
+  <tr>
+    <td><span class="method get">GET</span></td>
+    <td><code>/api/students/search/name?name=John</code></td>
+    <td>Search by name (partial match)</td>
+    <td>-</td>
+    <td>200 OK + StudentDTO[]</td>
+  </tr>
+  <tr>
+    <td><span class="method get">GET</span></td>
+    <td><code>/api/students/search/department?department=CS</code></td>
+    <td>Search by department</td>
+    <td>-</td>
+    <td>200 OK + StudentDTO[]</td>
+  </tr>
+  <tr>
+    <td><span class="method get">GET</span></td>
+    <td><code>/api/students/search/roll-number?rollNumber=S123</code></td>
+    <td>Search by exact roll number</td>
+    <td>-</td>
+    <td>200 OK + StudentDTO</td>
+  </tr>
+</table>
+
+<h2 id="validation">13. Validation &amp; Error Responses</h2>
+
+<h3>Sample Error Responses:</h3>
+
+<p><strong>404 — Student Not Found:</strong></p>
+<pre>
+{
+  "status": 404,
+  "message": "Student not found with id: 115",
+  "timestamp": "2026-06-14T15:30:00.000"
+}
+</pre>
+
+<p><strong>400 — Validation Failed:</strong></p>
+<pre>
+{
+  "status": 400,
+  "message": "firstName: First name is required; email: Email must be valid; semester: Semester must be at least 1",
+  "timestamp": "2026-06-14T15:30:00.000"
+}
+</pre>
+
+<p><strong>500 — Internal Server Error:</strong></p>
+<pre>
+{
+  "status": 500,
+  "message": "An unexpected error occurred",
+  "timestamp": "2026-06-14T15:30:00.000"
+}
+</pre>
+
+<h2 id="testing">14. Testing Strategy</h2>
+
+<h3>Test Coverage (28 tests):</h3>
+
+<table>
+  <tr><th>Test Class</th><th>Tests</th><th>Type</th><th>What it tests</th></tr>
+  <tr>
+    <td><code>StudentMapperTest</code></td>
+    <td>4</td>
+    <td>Unit</td>
+    <td>Mapping logic: Entity &harr; DTO conversion, null handling</td>
+  </tr>
+  <tr>
+    <td><code>StudentServiceImplTest</code></td>
+    <td>12</td>
+    <td>Unit (Mockito)</td>
+    <td>Business logic: CRUD operations, exceptions, search with mocked repository</td>
+  </tr>
+  <tr>
+    <td><code>StudentControllerTest</code></td>
+    <td>12</td>
+    <td>Integration (@WebMvcTest)</td>
+    <td>HTTP endpoints: status codes, request/response JSON, validation errors</td>
+  </tr>
+</table>
+
+<div class="note">
+<strong>Testing Annotations:</strong>
+<ul>
+  <li><code>@ExtendWith(MockitoExtension.class)</code> — Enables Mockito in JUnit 5</li>
+  <li><code>@Mock</code> — Creates a mock (fake) object</li>
+  <li><code>@WebMvcTest(StudentController.class)</code> — Loads only controller layer (lightweight)</li>
+  <li><code>@MockBean</code> — Replaces actual Spring bean with mock in application context</li>
+  <li><code>MockMvc</code> — Simulates HTTP requests without starting the server</li>
+</ul>
+</div>
+
+<h2 id="db">15. Database Schema</h2>
+
+<pre>
+Table: students
++----------------+--------------+--------+
+| Column         | Type         | Constraint      |
++----------------+--------------+--------+
+| id             | BIGSERIAL    | PRIMARY KEY     |
+| roll_number    | VARCHAR(20)  | NOT NULL, UNIQUE|
+| first_name     | VARCHAR(50)  | NOT NULL        |
+| last_name      | VARCHAR(50)  | NOT NULL        |
+| email          | VARCHAR(100) | NOT NULL, UNIQUE|
+| phone          | VARCHAR(15)  |                 |
+| department     | VARCHAR(50)  | NOT NULL        |
+| semester       | INTEGER      | NOT NULL        |
+| cgpa           | DOUBLE       | NOT NULL        |
++----------------+--------------+--------+
+</pre>
+
+<h2 id="how-to-run">16. How to Run</h2>
+
+<ol>
+  <li><strong>Prerequisites:</strong>
+    <ul>
+      <li>Java 17+</li>
+      <li>Maven 3.8+</li>
+      <li>PostgreSQL (running on localhost:5432)</li>
+    </ul>
+  </li>
+  <li><strong>Create Database:</strong>
+    <pre>CREATE DATABASE student_management_db;</pre>
+  </li>
+  <li><strong>Navigate to backend:</strong>
+    <pre>cd backend</pre>
+  </li>
+  <li><strong>Run the application:</strong>
+    <pre>mvn spring-boot:run</pre>
+  </li>
+  <li><strong>Access Swagger UI:</strong>
+    <pre>http://localhost:8080/swagger-ui.html</pre>
+  </li>
+  <li><strong>Run tests:</strong>
+    <pre>mvn test</pre>
+  </li>
+</ol>
+
+<h2 id="postman">17. Postman Collection</h2>
+
+<p><strong>Base URL:</strong> <code>http://localhost:8080</code></p>
+
+<h3>1. Add Student — POST</h3>
+<div class="endpoint">
+  <span class="method post">POST</span> <code>http://localhost:8080/api/students</code>
+</div>
+<pre>Headers: Content-Type: application/json
+
+Body (JSON):
+{
+  "rollNumber": "S123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "department": "Computer Science",
+  "semester": 3,
+  "cgpa": 8.5
+}</pre>
+
+<h3>2. Get All Students — GET</h3>
+<div class="endpoint">
+  <span class="method get">GET</span> <code>http://localhost:8080/api/students</code>
+</div>
+
+<h3>3. Get Student by ID — GET</h3>
+<div class="endpoint">
+  <span class="method get">GET</span> <code>http://localhost:8080/api/students/1</code>
+</div>
+
+<h3>4. Update Student — PUT</h3>
+<div class="endpoint">
+  <span class="method put">PUT</span> <code>http://localhost:8080/api/students/1</code>
+</div>
+<pre>Body (same structure as POST)</pre>
+
+<h3>5. Delete Student — DELETE</h3>
+<div class="endpoint">
+  <span class="method delete">DELETE</span> <code>http://localhost:8080/api/students/1</code>
+</div>
+
+<h3>6. Search by Name — GET</h3>
+<div class="endpoint">
+  <span class="method get">GET</span> <code>http://localhost:8080/api/students/search/name?name=John</code>
+</div>
+
+<h3>7. Search by Department — GET</h3>
+<div class="endpoint">
+  <span class="method get">GET</span> <code>http://localhost:8080/api/students/search/department?department=CS</code>
+</div>
+
+<h3>8. Search by Roll Number — GET</h3>
+<div class="endpoint">
+  <span class="method get">GET</span> <code>http://localhost:8080/api/students/search/roll-number?rollNumber=S123</code>
+</div>
+
+<h2 id="interview">18. Interview Questions &amp; Answers</h2>
+
+<h3>Q1: What is the difference between @Entity, @Table, and @Column?</h3>
+<p><strong>@Entity</strong> marks the class as a JPA entity that maps to a database table. <strong>@Table</strong> specifies the table name (optional; defaults to class name). <strong>@Column</strong> configures individual column properties like name, nullable, unique, length.</p>
+
+<h3>Q2: Why use DTOs instead of exposing entities directly?</h3>
+<p>DTOs decouple the API contract from the internal persistence model. If the entity changes (e.g., adding a password hash), the API stays the same. DTOs also prevent lazy loading issues and over-fetching of data.</p>
+
+<h3>Q3: What is the purpose of @RestControllerAdvice?</h3>
+<p>It provides centralized exception handling across all @RestController classes. Instead of try-catch in every controller method, one class handles all exceptions and returns consistent error responses.</p>
+
+<h3>Q4: Explain @PathVariable vs @RequestParam</h3>
+<p><strong>@PathVariable</strong> extracts values from the URL path template (e.g., <code>/students/{id}</code> -> id=5). <strong>@RequestParam</strong> extracts query parameters from the URL after <code>?</code> (e.g., <code>?name=John</code> -> name=John). Use path variables for required resource identifiers, query params for optional filters.</p>
+
+<h3>Q5: How does Spring Data JPA's query derivation work?</h3>
+<p>Spring Boot parses the method name at startup and generates JPQL queries automatically. For example, <code>findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String, String)</code> generates: <code>WHERE LOWER(firstName) LIKE LOWER(CONCAT('%', ?, '%')) OR LOWER(lastName) LIKE LOWER(CONCAT('%', ?, '%'))</code>.</p>
+
+<h3>Q6: What is the difference between @Mock and @MockBean?</h3>
+<p><strong>@Mock</strong> (Mockito) creates a simple mock — used in plain unit tests. <strong>@MockBean</strong> (Spring Boot) creates a mock and replaces the actual bean in the Spring application context — used in integration tests like @WebMvcTest.</p>
+
+<h3>Q7: What HTTP status codes should a REST API return?</h3>
+<p>POST (create) → 201 Created. GET (read) → 200 OK. PUT (update) → 200 OK. DELETE (delete) → 204 No Content. Validation errors → 400 Bad Request. Not found → 404. Server errors → 500.</p>
+
+<h3>Q8: Explain the layered architecture pattern</h3>
+<ul>
+  <li><strong>Controller</strong> — Handles HTTP, delegates to service, returns response</li>
+  <li><strong>Service</strong> — Business logic, transactions, coordinates other layers</li>
+  <li><strong>Repository</strong> — Data access, queries</li>
+  <li><strong>Entity</strong> — Database mapping</li>
+  <li><strong>DTO</strong> — API contract</li>
+</ul>
+<p>Each layer only talks to the layer directly below it. This creates a separation of concerns and makes the code testable.</p>
+
+<h3>Q9: How would you handle updating only specific fields (PATCH vs PUT)?</h3>
+<p>PUT replaces the entire resource — client sends all fields. PATCH is for partial updates — client sends only changed fields. For PATCH, you'd typically read the existing entity, apply only non-null fields from the request, and save.</p>
+
+<h3>Q10: What is Optional and why use it?</h3>
+<p>Optional is a container that may or may not hold a value. It forces the caller to handle the empty case explicitly (using <code>orElse()</code>, <code>orElseThrow()</code>, etc.) instead of risking NullPointerException from returning null.</p>
+
+<hr>
+<p style="text-align: center; color: #666; margin-top: 50px;"><em>Student Management System — Complete Interview Guide</em></p>
+
+</body>
+</html>
