@@ -1,5 +1,8 @@
 C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\dto\StudentDTO.java
 C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\entity\Student.java
+C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\exception\ErrorResponse.java
+C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\exception\GlobalExceptionHandler.java
+C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\exception\StudentNotFoundException.java
 C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\mapper\StudentMapper.java
 C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\repository\StudentRepository.java
 C:\Users\shaik\OneDrive\Desktop\Student_Management\backend\src\main\java\com\studentmanagement\StudentManagementApplication.java
