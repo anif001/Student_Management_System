@@ -1,3 +1,5 @@
 com\studentmanagement\repository\StudentRepository.class
+com\studentmanagement\mapper\StudentMapper.class
 com\studentmanagement\StudentManagementApplication.class
+com\studentmanagement\dto\StudentDTO.class
 com\studentmanagement\entity\Student.class
