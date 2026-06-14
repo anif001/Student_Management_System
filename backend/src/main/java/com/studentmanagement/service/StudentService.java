@@ -19,4 +19,6 @@ public interface StudentService {
     List<StudentDTO> searchStudentByName(String name);
 
     List<StudentDTO> searchStudentByDepartment(String department);
+
+    StudentDTO searchStudentByRollNumber(String rollNumber);
 }

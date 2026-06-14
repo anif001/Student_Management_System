@@ -83,4 +83,12 @@ public class StudentServiceImpl implements StudentService {
                 .map(studentMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public StudentDTO searchStudentByRollNumber(String rollNumber) {
+        Student student = studentRepository.findByRollNumber(rollNumber)
+                .orElseThrow(() -> new StudentNotFoundException(
+                        "Student not found with roll number: " + rollNumber));
+        return studentMapper.toDTO(student);
+    }
 }
