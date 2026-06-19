@@ -1,5 +1,7 @@
 # Student Management System
 
+**Live:** [https://student-management-system.onrender.com](https://student-management-system-cqz4.onrender.com/)
+
 A REST API built with Spring Boot for managing student records. Started this as a mini project to get hands-on with Spring Boot, JPA, and related stuff.
 
 ## Tech
